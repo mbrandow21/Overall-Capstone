@@ -1,6 +1,6 @@
 import React from 'react';
 import './styles/main.css';
-import {Home, Data} from './pages'
+import {Home, Data, Login, Registration} from './pages'
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
@@ -17,7 +17,20 @@ const router = createBrowserRouter([
     element: (
       <Data />
     )
-  }])
+  },
+  {
+    path: "/login",
+    element: (
+      <Login />
+    )
+  },
+  {
+    path: "/register",
+    element: (
+      <Registration />
+    )
+  }
+])
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

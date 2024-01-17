@@ -1,6 +1,6 @@
 import pyodbc
 import bcrypt
-from dbconnection import dbconnection
+from ..dbconnection import dbconnection
 
 
 #This is a basic user creation that only works for administrators so far.

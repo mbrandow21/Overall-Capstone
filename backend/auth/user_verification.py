@@ -1,12 +1,12 @@
 import pyodbc
 import bcrypt
-from dbconnection import dbconnection
+from ..dbconnection import dbconnection
 
 def verify_user(username, password):
     connection_string = dbconnection()
     with pyodbc.connect(connection_string) as connection:
         with connection.cursor() as cursor:
-            cursor.execute("SELECT Password FROM Test_Users WHERE username=?", (username,))
+            cursor.execute("SELECT Password FROM Users WHERE username=?", (username,))
             row = cursor.fetchone()
 
             # If no user found

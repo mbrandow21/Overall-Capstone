@@ -24,4 +24,4 @@ yarn-debug.log*
 yarn-error.log*
 
 #pycache
-*__pycache__*
+/*__pycache__*

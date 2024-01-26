@@ -29,6 +29,11 @@ const Registration = () => {
             alert('Registration failed. Please try again later.');
         });
     };
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+          handleRegistration();
+        }
+      };
 
     return (
         <div id="login-form-container">
@@ -45,6 +50,7 @@ const Registration = () => {
                     id="username"
                     value={username}
                     onChange={e => setUsername(e.target.value)}
+                    onKeyDown={handleKeyDown}
                 />
                 <label htmlFor="username">Username</label>
             </div>
@@ -58,6 +64,7 @@ const Registration = () => {
                     id="password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
+                    onKeyDown={handleKeyDown}
                 />
                 <label htmlFor="password">Password</label>
             </div> 

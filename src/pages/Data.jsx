@@ -1,30 +1,62 @@
-import React, { useState } from "react";
-import axios from "axios";
 
-const Data = () => {
-    const [inputData, setInputData] = useState('');
 
-    const handleInputChange = (e) => {
-        setInputData(e.target.value);
-    };
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-    const sendDataToBackend = () => {
-        axios.post('http://127.0.0.1:5000/api/postdata', { data: inputData })
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.error("There was an error!", error);
-            });
-    };
+const DataFetcher = () => {
+    const accessToken = localStorage.getItem('token');
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-    return (
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios({
+        method: "GET",
+        url: "http://localhost:5000/api/get", // Update with your actual endpoint
+        params: {
+          from: "Users",
+          // select: "User_ID",
+          // filter: "User_ID IS NOT NULL",
+          // Add any other parameters you need for your request
+        },
+        headers: {
+          Authorization: 'Bearer ' + accessToken,
+          "Content-Type": "Application/JSON"
+        },
+      });
+
+      const result = response.data;
+      if (result.error) {
+        setError(result.error);
+      } else {
+        setData(result);
+      }
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []); // Empty dependency array means this effect runs once on mount
+
+  return (
+    <div>
+      {isLoading && <p>Loading...</p>}
+      {error && <p>Error: {error}</p>}
+      {data && (
         <div>
-            <h1>Hello World!</h1>
-            <input type="text" id="datainput" value={inputData} onChange={handleInputChange}/>
-            <button onClick={sendDataToBackend}>Send Data</button>
+          <h2>Data Fetched</h2>
+          {/* Render your data here */}
+          <pre>{JSON.stringify(data, null, 2)}</pre>
         </div>
-    );
-}
+      )}
+    </div>
+  );
+};
 
-export default Data;
+export default DataFetcher;

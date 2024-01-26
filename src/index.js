@@ -3,19 +3,23 @@ import './styles/main.css';
 import {Home, Data, Login, Registration} from './pages'
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-
+import { AuthProvider } from './auth/AuthProvider';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <Home />
+      <AuthProvider>
+        <Home />
+      </AuthProvider>
     )
   },
   {
     path: "/data",
     element: (
-      <Data />
+      <AuthProvider>
+        <Data />
+      </AuthProvider>
     )
   },
   {
@@ -27,13 +31,24 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: (
-      <Registration />
+      <AuthProvider>
+        <Registration />
+      </AuthProvider>
     )
-  }
+  },
+  // {
+  //   path: "/redirect",
+  //   element: isAuthenticated() ? redirect('/data') : redirect('/login')
+  // },
 ])
 const root = ReactDOM.createRoot(document.getElementById('root'));
+// this is your original root.render function
+// the reason why your AuthProvider code is running on every page is because every page is put inside the AuthProvider component
+// there is nothing necessarily wrong with this, I did it like this on the IT-Dashboard because I ALWAYS want to know if the user is logged in or not.
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
+  // <AuthProvider> {/* Ensure AuthProvider is correctly imported */}
+  // </AuthProvider>
 );

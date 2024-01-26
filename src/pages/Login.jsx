@@ -4,6 +4,7 @@ const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
+
     const handleLogin = (e) => {
         e.preventDefault(); // Prevents the default form submission action
 
@@ -14,6 +15,10 @@ const Login = () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ username, password })
+            // body: JSON.stringify({
+            //     username: username,
+            //     password: password
+            // })
         })
         .then(response => {
             if (!response.ok) {
@@ -22,16 +27,30 @@ const Login = () => {
             return response.json();
         })
         .then(data => {
-            alert(data.message);
+            if (data.token) {
+                // Storing the token in localStorage or sessionStorage
+                localStorage.setItem('token', data.token); // For localStorage
+                // sessionStorage.setItem('token', data.token); // For sessionStorage
+    
+                alert('Login successful!');
+                window.location = '/';
+            } else {
+                alert('Login successful, but no token received');
+            }
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
             alert('Login failed. Please check your credentials and try again.');
         });
     };
+    // const handleKeyDown = (e) => {
+    //     if (e.key === 'Enter') {
+    //         handleLogin();
+    //     }      
+    // };
 
     return (
-        <div id="login-form-container">
+        <form id="login-form-container" onSubmit={handleLogin}>
             <div id="sign-in-container">
                 <h1>Sign In</h1>
             </div>
@@ -63,9 +82,9 @@ const Login = () => {
             </div> 
             <div id="button-container">   
                 <p id="forhelp-contacts">For help, <a href="www.contacts" id="help-contacts">contact</a> an admin</p>
-                <button id="login-button" onClick={handleLogin}>Login</button> 
+                <button id="login-button" type="submit">Login</button> 
             </div>
-        </div>
+        </form>
     );
 };
 

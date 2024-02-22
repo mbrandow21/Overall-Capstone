@@ -1,6 +1,6 @@
 import React from 'react';
 import './styles/main.css';
-import {Home, Data, Login, Registration} from './pages'
+import { Data, Login, Registration, Dashboard} from './pages'
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AuthProvider } from './auth/AuthProvider';
@@ -10,10 +10,26 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <AuthProvider>
-        <Home />
+        <Dashboard />
       </AuthProvider>
     )
-  },
+  }, 
+  {
+    path: "/:table",
+    element: (
+      <AuthProvider>
+        <Dashboard />
+      </AuthProvider>
+    )
+  },   
+  {
+    path: "/:table/:record",
+    element: (
+      <AuthProvider>
+        <Dashboard />
+      </AuthProvider>
+    )
+  },   
   {
     path: "/data",
     element: (

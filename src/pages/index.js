@@ -1,10 +1,10 @@
-import Home from './Home';
 import Data from './Data';
 import Login from './Login';
 import Registration from './Registration';
+import Dashboard from './Dashboard';
 
 export {
-    Home,
+    Dashboard
 }
 export {
     Data,

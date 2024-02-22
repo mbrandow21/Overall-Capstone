@@ -1,0 +1,27 @@
+#record-display-container {
+  // padding: 15px;
+  grid-area: content;
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+  }
+  th {
+    text-align: left;
+    margin-right: 1rem;
+  }
+  th, td {
+    padding: .1rem;
+    border: 1px solid #888;
+    max-width: 200px; // Adjust based on your layout needs
+    overflow-wrap: break-word,
+  }
+  .record-display-container{
+    button {
+    h2 {
+      padding: none;
+    }
+  }
+  
+  }
+}

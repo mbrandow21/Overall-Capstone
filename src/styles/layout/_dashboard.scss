@@ -1,0 +1,11 @@
+#dashboard-page {
+  // margin: 8px;  
+  // background: rgb(116, 113, 113);
+  display: grid;
+  grid-template-areas:
+    "header header header"
+    "sidebar content content";
+  grid-template-columns: 20% auto auto;
+  height:100vh;
+  grid-template-rows: 25vh auto;
+}

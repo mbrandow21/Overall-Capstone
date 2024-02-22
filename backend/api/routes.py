@@ -1,12 +1,66 @@
 from flask import request, jsonify
 from . import api  # Import the Blueprint you defined in flaskr/auth/__init__.py
-from flask import Flask, jsonify, request
+from flask import Flask, request
 from ..tokens import authenticateToken
 import pyodbc
 from ..dbconnection import dbconnection
 import base64
+import json
+
+@api.route('/post/procedure', methods=['POST'])
+def run_procedure():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header or not auth_header.startswith('Bearer '):
+        return jsonify({"error": "Bearer token not found"}), 401
+    token = auth_header.split(" ")[1]
+
+    user_id, status_code = authenticateToken(token)
+    if status_code != 200:
+        return jsonify({"error": "Authentication failed"}), status_code
+
+    procName = request.args.get('proc')
+    parameters = request.args.get('parameters', None)
+
+    print('THIS IS PARAMETERS', parameters)
 
 
+    try:
+        parameters_dict = json.loads(parameters) if parameters else {}
+    except json.JSONDecodeError:
+        return jsonify({"error": "Invalid JSON format for parameters"}), 400
+
+    connection_string = dbconnection()
+    # Assuming dbconnection() returns a valid connection string
+
+    try:
+        with pyodbc.connect(connection_string) as connection:
+            with connection.cursor() as cursor:
+                # Prepare and execute the stored procedure with parameters
+                params = [user_id] + list(parameters_dict.values())
+                sql = f"EXEC {procName} ? " + ", ".join([",?"] * len(parameters_dict))
+                cursor.execute(sql, params)
+
+                all_result_sets = []
+                while True:  # Start a loop that will run at least once
+                    if cursor.description is not None:  # Ensure there are results to fetch
+                        columns = [column[0] for column in cursor.description]
+                        rows = cursor.fetchall()
+                        if rows:
+                            data = [dict(zip(columns, row)) for row in rows]
+                            # Handle bytes data within the current result set
+                            for item in data:
+                                for key, value in item.items():
+                                    if isinstance(value, bytes):
+                                        item[key] = base64.b64encode(value).decode('utf-8')
+                            all_result_sets.append(data)
+                    if not cursor.nextset():  # Check if there are more result sets
+                        break  # Exit the loop if no more result sets are available
+
+                # Return the collected result sets
+                return jsonify(all_result_sets) if all_result_sets else jsonify({"error": "No data found, but stored procedure was executed."})
+    except pyodbc.Error as e:
+        print(e)
+        return jsonify({"error": "Server error"}), 500
 
 @api.route('/get', methods=['GET'])
 def get_data():
@@ -23,10 +77,14 @@ def get_data():
 
     tableName = request.args.get('from')
     select = request.args.get('select', '*')  # Defaults to '*' if 'select' is not provided
-    filter = request.args.get('filter', None)
+    filter = request.args.get('filter', 'none')
+    join = request.args.get('join', ' ')
+
+    if filter != 'none':
+        filter = ' WHERE ' + filter
+    # print(tableName)
     # Validate tableName and select here
 
-    print(tableName)
 
     connection_string = dbconnection()
     from flask import jsonify
@@ -35,7 +93,8 @@ def get_data():
     try:
         with pyodbc.connect(connection_string) as connection:
             with connection.cursor() as cursor:
-                cursor.execute("EXEC api_GetProcedure ?, ?, ?, ?", tableName, select, filter, user_id)
+                print("EXEC api_GetProcedure ?, ?, ?, ?, ?", user_id, tableName, select, filter, join)
+                cursor.execute("EXEC api_GetProcedure ?, ?, ?, ?, ?", user_id, tableName, select, filter, join)
                 rows = cursor.fetchall()
                 
                 # Convert rows to a list of dicts
@@ -52,5 +111,6 @@ def get_data():
                 return jsonify(data) if data else jsonify({"error": "No data found"})
     except pyodbc.Error as e:
         # Log the error
+        print(e)
         return jsonify({"error": "Server error"}), 500
 

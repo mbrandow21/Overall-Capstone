@@ -16,7 +16,7 @@ function DataDisplay() {
     const fetchData = async () => {
       setIsLoading(true);
       setError(null); // Reset error state on each attempt
-      if (table != 0) try {
+      if (table && table != 0) try {
         const response = await axios({
           method: "POST",
           url: "http://localhost:5000/api/post/procedure",

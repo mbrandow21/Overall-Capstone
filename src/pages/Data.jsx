@@ -13,13 +13,10 @@ const DataFetcher = () => {
     setIsLoading(true);
     try {
       const response = await axios({
-        method: "POST",
-        url: "http://localhost:5000/api/post/procedure",
+        method: "GET",
+        url: "http://localhost:5000/api/get",
         params: {
-          proc: "api_GetTableDisplay",
-          parameters: JSON.stringify({
-            '@Page_ID': 1,
-          }),
+          from:"Users",
         },
         headers: {
           Authorization: 'Bearer ' + accessToken,

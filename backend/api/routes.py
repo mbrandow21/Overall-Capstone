@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, Response
 from . import api  # Import the Blueprint you defined in flaskr/auth/__init__.py
 from flask import Flask, request
 from ..tokens import authenticateToken
@@ -56,8 +56,11 @@ def run_procedure():
                     if not cursor.nextset():  # Check if there are more result sets
                         break  # Exit the loop if no more result sets are available
 
-                # Return the collected result sets
-                return jsonify(all_result_sets) if all_result_sets else jsonify({"error": "No data found, but stored procedure was executed."})
+                # Convert all_result_sets to JSON string with order preserved
+                json_data = json.dumps(all_result_sets, sort_keys=False)
+                
+                # Return JSON string with MIME type as application/json
+                return Response(json_data, mimetype='application/json') if all_result_sets else jsonify({"error": "No data found, but stored procedure was executed."})
     except pyodbc.Error as e:
         print(e)
         return jsonify({"error": "Server error"}), 500
@@ -78,7 +81,7 @@ def get_data():
     tableName = request.args.get('from')
     select = request.args.get('select', '*')  # Defaults to '*' if 'select' is not provided
     filter = request.args.get('filter', 'none')
-    join = request.args.get('join', ' ')
+    join = request.args.get('join', '')
 
     if filter != 'none':
         filter = ' WHERE ' + filter
@@ -97,18 +100,21 @@ def get_data():
                 cursor.execute("EXEC api_GetProcedure ?, ?, ?, ?, ?", user_id, tableName, select, filter, join)
                 rows = cursor.fetchall()
                 
-                # Convert rows to a list of dicts
+                # Convert rows to a list of dicts and preserve order
                 columns = [column[0] for column in cursor.description]
                 data = [dict(zip(columns, row)) for row in rows]
 
-                # Handle bytes data
+                # Handle bytes data and preserve order
                 for item in data:
                     for key, value in item.items():
                         if isinstance(value, bytes):
                             item[key] = base64.b64encode(value).decode('utf-8')  # Convert bytes to Base64 encoded string
 
-                # Use jsonify to return the data
-                return jsonify(data) if data else jsonify({"error": "No data found"})
+                # Convert data to JSON string with order preserved
+                json_data = json.dumps(data, sort_keys=False)
+                
+                # Return JSON string with MIME type as application/json
+                return Response(json_data, mimetype='application/json') if data else jsonify({"error": "No data found"})
     except pyodbc.Error as e:
         # Log the error
         print(e)

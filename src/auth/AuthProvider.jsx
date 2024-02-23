@@ -28,7 +28,6 @@ export const AuthProvider = ({ children}) => {
 
   useEffect(() => {
     if (accessToken) {
-      console.log(accessToken);
       checkAccessToken(accessToken)
         .then(response => {
           setAuthentication(response.authenticated)

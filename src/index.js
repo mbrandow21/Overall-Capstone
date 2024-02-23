@@ -1,8 +1,9 @@
 import React from 'react';
 import './styles/main.css';
-import { Data, Login, Registration, Dashboard} from './pages'
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+import { Data, Login, Registration, Dashboard} from './pages'
 import { AuthProvider } from './auth/AuthProvider';
 
 const router = createBrowserRouter([

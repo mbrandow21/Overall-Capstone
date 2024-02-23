@@ -41,7 +41,6 @@ function Navbar() {
     fetchData();
   }, []);  
   
-  console.log(data)
   if (isLoading) return <div>Loading...</div>;
 
   return (

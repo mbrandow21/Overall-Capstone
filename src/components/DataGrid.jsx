@@ -2,18 +2,16 @@ import React from 'react';
 import { useParams } from "react-router-dom";
 
 import DataDisplay from './DataDisplay';
-
+import CreateRecord from './CreateRecord';
 
 function DataGrid() {
-  let { table, record } = useParams();
+  let { record } = useParams();
 
   if(!record) return (
     <DataDisplay />
   );
   else if(record == 0) return (
-    <div id="record-display-container" className='main-container'>
-      <h1>Record Creation Screen</h1>
-    </div>
+    <CreateRecord />
   );
   else return (
     <div id="record-display-container" className='main-container'>

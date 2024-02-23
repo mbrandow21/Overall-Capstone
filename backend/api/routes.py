@@ -120,3 +120,53 @@ def get_data():
         print(e)
         return jsonify({"error": "Server error"}), 500
 
+
+@api.route('/post/createrecord', methods=['POST'])
+def createRecord():
+    auth_header = request.headers.get('Authorization')
+    if auth_header and auth_header.startswith('Bearer '):
+        token = auth_header.split(" ")[1]
+    else:
+        return jsonify({"error": "Bearer token not found"}), 401
+
+    user_id, status_code = authenticateToken(token)
+
+    if status_code != 200:
+        return jsonify({"error": "Authentication failed"}), status_code
+
+    data = request.get_json()  # This method parses the JSON data
+    data_dict = data['recordData']
+    table_name = data['tablename']
+    # Generate column names and placeholders for values
+    columns = ', '.join(data_dict.keys())
+    placeholders = ', '.join(['?'] * len(data_dict))
+
+    # Prepare the INSERT statement
+    sql = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
+
+    # Values to be inserted
+    values = tuple(data_dict.values())
+
+    # Get a cursor from the connection
+    connection_string = dbconnection()
+
+    try:
+        with pyodbc.connect(connection_string) as conn:
+            cursor = conn.cursor()
+            try:
+                # Execute the INSERT statement using a cursor
+                cursor.execute(sql, values)
+                # Commit the transaction
+                conn.commit()
+                print("Record inserted successfully.")
+                return jsonify({"data": "Record Inserted Successfully"}), 200
+            except Exception as e:
+                print(f"An error occurred: {e}")
+                # Roll back if there's an error
+                conn.rollback()
+                # It's better to return a generic error message to the client
+                return jsonify({"error": "An error occurred during record insertion"}), 500
+    except pyodbc.Error as e:
+        # Log the error
+        print(e)
+        return jsonify({"error": "Server error"}), 500

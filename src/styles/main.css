@@ -706,6 +706,7 @@ h1 {
   -webkit-backdrop-filter: blur(8px);
           backdrop-filter: blur(8px);
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  overflow-y: auto;
 }
 
 #main-container-side-bar {
@@ -779,4 +780,28 @@ a {
 }
 #record-display-container .record-display-container button h2 {
   padding: none;
+}
+
+#create-record-form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+#create-record-form * {
+  margin: 0.5rem;
+}
+
+#create-record-label-container {
+  display: flex;
+  flex-direction: column;
+}
+
+#create-record-submit, #record-submit-null {
+  flex-basis: 100%;
+}
+
+.record-field-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }/*# sourceMappingURL=main.css.map */

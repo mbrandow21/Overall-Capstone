@@ -1,0 +1,24 @@
+#create-record-form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  *{
+    margin: .5rem;
+  }
+}
+#create-record-label-container {
+  display:flex;
+  flex-direction: column;
+  // flex-basis: 40%;
+}
+#create-record-submit, #record-submit-null {
+  flex-basis: 100%;
+}
+.record-field-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  input {
+    // width: 100%;
+  }
+}

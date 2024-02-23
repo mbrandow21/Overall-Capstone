@@ -25,6 +25,7 @@ def authenticateToken(token):
     try:
         data = jwt.decode(token, os.environ.get("TOKEN_SECRET"), algorithms=["HS256"])
         current_user = data["user_id"]
+        print(current_user)
     except ExpiredSignatureError:
         print('This token has expired get a new one!')
         return (None, 401)

@@ -34,7 +34,13 @@ function DataDisplay() {
         setData(response.data[0] || []); // Safely default to an empty array if no data
         setSingularExpression(response.data[1] || []);
         console.log(response)
+        if (response.status === 401) {
+          // Handle unauthorized access
+          console.log('Unauthorized access. Redirecting to login.');
+          window.location = '/login';
+        }
       } catch (err) {
+
         setError(err.message || "An unknown error occurred"); // Properly capture and set the error message
       } finally {
         setIsLoading(false);

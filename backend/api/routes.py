@@ -37,7 +37,8 @@ def run_procedure():
             with connection.cursor() as cursor:
                 # Prepare and execute the stored procedure with parameters
                 params = [user_id] + list(parameters_dict.values())
-                sql = f"EXEC {procName} ? " + ", ".join([",?"] * len(parameters_dict))
+                sql = f"EXEC {procName} ? " + " ".join([",?"] * len(parameters_dict))
+                print('HERE IS MY SQL', sql)
                 cursor.execute(sql, params)
 
                 all_result_sets = []

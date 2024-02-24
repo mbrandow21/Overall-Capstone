@@ -562,7 +562,7 @@ html {
   font-family: "Roboto", sans-serif;
   font-weight: 300;
   color: #222;
-  background-color: #7d9bad;
+  background-color: #ce8e4a;
 }
 
 main {
@@ -700,12 +700,9 @@ h1 {
 }
 
 .main-container {
-  background-color: rgba(255, 255, 255, 0.55);
-  outline: 2px solid rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.5);
+  outline: 2px solid rgba(201, 106, 46, 0.307);
   outline-offset: -2px;
-  -webkit-backdrop-filter: blur(8px);
-          backdrop-filter: blur(8px);
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   overflow-y: auto;
 }
 
@@ -758,6 +755,7 @@ a {
   grid-area: header;
   display: grid;
   place-items: center;
+  background-color: transparent;
 }
 
 #record-display-container {
@@ -804,4 +802,17 @@ a {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+}
+#selected-record-fieldset {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0 0 2rem 2rem;
+}
+
+#record-label-container {
+  margin-top: 2rem;
+  position: relative;
+  flex-basis: 40%;
 }/*# sourceMappingURL=main.css.map */

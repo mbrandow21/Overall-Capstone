@@ -1,0 +1,12 @@
+#selected-record-fieldset {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0 0 2rem 2rem
+}
+#record-label-container {
+  margin-top: 2rem;
+  position: relative;
+  flex-basis:40%;
+}

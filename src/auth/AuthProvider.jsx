@@ -42,6 +42,7 @@ export const AuthProvider = ({ children}) => {
   useEffect(() => {
     if (isAuthenticated===false) window.location = '/login';
     if (isAuthenticated===null) window.location = '/login'
+    // if (isAuthenticated===undefined) window.location = '/login'
   }, [isAuthenticated])
 
   return (

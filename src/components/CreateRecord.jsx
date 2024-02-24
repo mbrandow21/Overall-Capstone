@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from "react-router-dom";
+import BackButton from './BackButton';
 
 
 const CreateRecord = () => {
@@ -63,6 +64,11 @@ const CreateRecord = () => {
           "Content-Type": "Application/JSON"
         },
       });
+      if (response.status === 401) {
+        // Handle unauthorized access
+        console.log('Unauthorized access. Redirecting to login.');
+        window.location = '/login';
+      }
 
       const result = response.data;
       if (result.error) {
@@ -121,6 +127,7 @@ const CreateRecord = () => {
   if(error) return(<div>Error: {error}</div>)
   return (
     <div id="record-display-container" className='main-container'>
+      <BackButton />
       <form onSubmit={handleSubmit} id="create-record-form">
         {data.map(column => {
           if (column.PK === "TRUE") return null; // Skip primary keys

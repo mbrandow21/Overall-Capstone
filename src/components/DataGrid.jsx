@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 
 import DataDisplay from './DataDisplay';
 import CreateRecord from './CreateRecord';
+import ViewRecord from './ViewRecord';
 
 function DataGrid() {
   let { record } = useParams();
@@ -14,9 +15,7 @@ function DataGrid() {
     <CreateRecord />
   );
   else return (
-    <div id="record-display-container" className='main-container'>
-      <h1>Record Display Screen {record}</h1>
-    </div>
+    <ViewRecord />
   )
 }
 

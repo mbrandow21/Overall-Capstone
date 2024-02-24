@@ -24,6 +24,13 @@ function Navbar() {
         },
       });
 
+
+      if (response.status === 401) {
+        // Handle unauthorized access
+        console.log('Unauthorized access. Redirecting to login.');
+        window.location = '/login';
+      }
+      
       const result = response.data;
       if (result.error) {
         setError(result.error);

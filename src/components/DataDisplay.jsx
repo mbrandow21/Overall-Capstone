@@ -33,7 +33,7 @@ function DataDisplay() {
         });
         setData(response.data[0] || []); // Safely default to an empty array if no data
         setSingularExpression(response.data[1] || []);
-        console.log(response)
+        // console.log(response)
         if (response.status === 401) {
           // Handle unauthorized access
           console.log('Unauthorized access. Redirecting to login.');
@@ -63,7 +63,6 @@ function DataDisplay() {
     setSearchQuery(e.target.value);
   };
 
-  console.log(singularExpression[0].Allow_New_Button)
   // Protect against cases where data might be null or empty
   const headers = data.length > 0 ? Object.keys(data[0]) : [];
 

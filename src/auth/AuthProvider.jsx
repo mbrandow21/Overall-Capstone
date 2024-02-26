@@ -16,7 +16,18 @@ const checkAccessToken = async (token) => await axios({
     // data: JSON.stringify( token )
   })
   .then(response => response.data)
-  .catch(error => console.error(error));
+  .catch(error => {
+    console.error(error);
+    // Handling unauthorized access specifically
+    if (error.response && error.response.status === 401) {
+      console.log('Unauthorized access. Redirecting to login.');
+      window.location = '/login';
+    } else {
+      // Handle other errors
+      console.log('An error occurred', error.message);
+    }
+  });
+ 
 
 export const AuthContext = createContext( false );
 

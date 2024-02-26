@@ -815,4 +815,29 @@ a {
   margin-top: 2rem;
   position: relative;
   flex-basis: 40%;
+}
+
+.DropdownButton {
+  color: white;
+  background-color: blue;
+  border-radius: 5px;
+  padding: 5px;
+  width: -moz-max-content;
+  width: max-content;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.DropdownElement {
+  color: white;
+  background-color: green;
+  border-radius: 5px;
+  padding: 5px;
+  width: -moz-max-content;
+  width: max-content;
 }/*# sourceMappingURL=main.css.map */

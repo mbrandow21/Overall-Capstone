@@ -3,8 +3,9 @@ import axios from 'axios';
 import { useParams } from "react-router-dom";
 import BackButton from './BackButton';
 
+import {getForeignKeyValue} from './getRecords'
 
-const ViewRecord = () => {
+const ViewRecord = ( recordExpression ) => {
   const accessToken = localStorage.getItem('token');
   const [data, setData] = useState([]);
   const [tableNameArr, setTableName] = useState();
@@ -58,12 +59,38 @@ const ViewRecord = () => {
   }, [table, accessToken]);
   useEffect(() => {
     if(tableNameArr !== undefined){
-      console.log(tableNameArr)
+      // console.log(tableNameArr)
       setSingularName(tableNameArr[0].Singular_Name)
     }
   },[tableNameArr])
 
+  useEffect(() => {
+    const fetchForeignKeyValues = async () => {
+      if (recordData && data) {
+        // Assuming each item in 'data' knows if it's a FK and what table it points to
+        const updatedDataPromises = data.map(async (column) => {
+          if (column.DATA_TYPE === 'int' && column.FK) {
+            // Assuming 'column' has properties 'ForeignKeyTable' and 'ForeignKeyID'
+            const foreignKeyTable = column.FK;
+            // Here you might need to find the actual ID to use; placeholder '1' used as an example
+            const foreignKeyID = recordData[0][column.COLUMN_NAME];
+            const label = await getForeignKeyValue(foreignKeyID, foreignKeyTable);
+            return { ...column, label }; // Store the resolved label directly in the column object
+          }
+          return column;
+        });
+  
+        // Wait for all promises to resolve
+        const updatedData = await Promise.all(updatedDataPromises);
 
+        setData(updatedData); // Update state with enriched data
+      }
+    };
+  
+    fetchForeignKeyValues();
+  }, [recordData, accessToken]); // Dependencies
+
+  // console.log(recordData)
   if(isLoading) return(<div id="record-display-container" className='main-container'>Loading...</div>)
   if(error) return(<div id="record-display-container" className='main-container'>Error: {error}</div>)
   return (
@@ -78,7 +105,15 @@ const ViewRecord = () => {
           {data.map(column => {
             if (column.PK === 'TRUE') return
 
-            let label = recordData[0][column.COLUMN_NAME]
+            let label = recordData[0][column.COLUMN_NAME];
+
+            if (column.DATA_TYPE === 'bit') {
+              label = label ? 'Yes' : 'No';
+            }
+            if (column.DATA_TYPE === 'int' && column.FK){
+              label = column.label
+            }
+
 
             return (
               <div id='record-label-container' key={column.COLUMN_NAME}>

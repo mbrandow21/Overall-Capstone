@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from "react-router-dom";
+
+import Dropdown from './Dropdown';
+import DropdownElement from './DropdownElement';
 import BackButton from './BackButton';
 
 
@@ -121,8 +124,6 @@ const CreateRecord = () => {
       // TODO: Replace console.log(formData) with your form submission function
     }
   };
-  
-  
   if(isLoading) return(<div>Loading...</div>)
   if(error) return(<div>Error: {error}</div>)
   return (
@@ -136,7 +137,11 @@ const CreateRecord = () => {
           if (column.DATA_TYPE === "nvarchar" || column.DATA_TYPE === "varchar") {
             inputField = <input type="text" maxLength={column.CHARACTER_MAXIMUM_LENGTH} onChange={e => handleChange(column.COLUMN_NAME, e.target.value)} />;
           } else if (column.DATA_TYPE === "int") {
-            inputField = <input type="number" onChange={e => handleChange(column.COLUMN_NAME, parseInt(e.target.value, 10))} />;
+            if (column.FK){
+              inputField = <Dropdown props={column.FK} onDropdownChange={(selectedValue) => handleChange(column.COLUMN_NAME, selectedValue)} />;
+            } else {
+              inputField = <input type="number" onChange={e => handleChange(column.COLUMN_NAME, parseInt(e.target.value, 10))} />;
+            }
           } else if (column.DATA_TYPE === "bit") {
             inputField = (
               <>

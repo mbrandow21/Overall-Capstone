@@ -96,34 +96,34 @@ const CreateRecord = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Assume no errors initially
     let hasError = false;
+    let errors = {}; // Initialize an object to track field-specific errors
   
-    console.log("Form Data on Submit:", formData); // Debug: Log form data
-  
-    // Check each required field to ensure it's not undefined, null, or just an empty string
     data.forEach(column => {
       const value = formData[column.COLUMN_NAME];
-      console.log(`Checking ${column.COLUMN_NAME}:`, value); // Debug: Log each check
-  
       if (column.PK !== "TRUE" && column.IS_NULLABLE === "NO" && (value === undefined || value === null || value.toString().trim() === "")) {
-        console.log(`${column.COLUMN_NAME} is required and missing`); // Debug: Log missing required field
+        errors[column.COLUMN_NAME] = `${column.COLUMN_NAME} is required.`; // Assign a specific error message
         hasError = true;
+      }
+      if (column.IS_NULLABLE === 'NO' && !value){
+        hasError = false;
       }
     });
   
     if (hasError) {
-      console.log("Validation Failed"); // Debug: Log validation failure
+      console.log("Validation Failed");
+      // Instead of setting just a boolean, you could set the errors object to your state
+      // setFormErrors(errors); // Assuming you have a state to track form errors
       setValidationError(true);
     } else {
-      console.log("Validation Passed, Form Submitted"); // Debug: Log successful validation
-      console.log(formData)
-      postData(formData)
+      console.log("Validation Passed, Form Submitted");
+      console.log(formData);
+      postData(formData); // Your form submission function
       setValidationError(false);
-      // Integrate with actual submission logic here
-      // TODO: Replace console.log(formData) with your form submission function
+      // Reset form state or redirect user as needed
     }
   };
+  
   if(isLoading) return(<div>Loading...</div>)
   if(error) return(<div>Error: {error}</div>)
   return (
@@ -132,30 +132,39 @@ const CreateRecord = () => {
       <form onSubmit={handleSubmit} id="create-record-form">
         {data.map(column => {
           if (column.PK === "TRUE") return null; // Skip primary keys
-
-          let inputField = null;
-          if (column.DATA_TYPE === "nvarchar" || column.DATA_TYPE === "varchar") {
-            inputField = <input type="text" maxLength={column.CHARACTER_MAXIMUM_LENGTH} onChange={e => handleChange(column.COLUMN_NAME, e.target.value)} />;
-          } else if (column.DATA_TYPE === "int") {
-            if (column.FK){
-              inputField = <Dropdown props={column.FK} onDropdownChange={(selectedValue) => handleChange(column.COLUMN_NAME, selectedValue)} />;
-            } else {
-              inputField = <input type="number" onChange={e => handleChange(column.COLUMN_NAME, parseInt(e.target.value, 10))} />;
-            }
-          } else if (column.DATA_TYPE === "bit") {
-            inputField = (
-              <>
-                <input type="radio" name={column.COLUMN_NAME} value="Yes" onChange={e => handleChange(column.COLUMN_NAME, true)} /> Yes
-                <input type="radio" name={column.COLUMN_NAME} value="No" onChange={e => handleChange(column.COLUMN_NAME, false)} /> No
-                {column.IS_NULLABLE === "YES" && <button type="button" onClick={() => handleChange(column.COLUMN_NAME, null)}>N/A</button>}
-              </>
-            );
-          } // Add more conditions for other data types as needed
-
+  
+          let inputField;
+          switch(column.DATA_TYPE) {
+            case "nvarchar":
+            case "varchar":
+              inputField = column.CHARACTER_MAXIMUM_LENGTH >= 254 ? 
+                <textarea rows="5" className='big-text-box' maxLength={column.CHARACTER_MAXIMUM_LENGTH} onChange={e => handleChange(column.COLUMN_NAME, e.target.value)}></textarea> :
+                <input type="text" maxLength={column.CHARACTER_MAXIMUM_LENGTH} onChange={e => handleChange(column.COLUMN_NAME, e.target.value)} />;
+              break;
+            case "int":
+              inputField = column.FK ?
+                <Dropdown props={column.FK} onDropdownChange={(selectedValue) => handleChange(column.COLUMN_NAME, selectedValue)} /> :
+                <input type="number" onChange={e => handleChange(column.COLUMN_NAME, parseInt(e.target.value, 10))} />;
+              break;
+            case "bit":
+              inputField = (
+                <>
+                  <input type="radio" name={column.COLUMN_NAME} value="Yes" onChange={e => handleChange(column.COLUMN_NAME, true)} /> Yes
+                  <input type="radio" name={column.COLUMN_NAME} value="No" onChange={e => handleChange(column.COLUMN_NAME, false)} /> No
+                  {column.IS_NULLABLE === "YES" && <button type="button" onClick={() => handleChange(column.COLUMN_NAME, null)}>N/A</button>}
+                </>
+              );
+              break;
+            // Handle other data types as needed
+            default:
+              inputField = <p>Auto Filled Info</p>; // For undefined data types or auto-filled info
+              break;
+          }
+  
           return (
             <div key={column.COLUMN_NAME} id='create-record-label-container'>
               <div className='record-field-container'> 
-                <div>
+                <div className='create-record-label'>
                   <label>
                     {column.COLUMN_NAME}
                     {column.IS_NULLABLE === "NO" && <span style={{color: 'red'}}>*</span>}

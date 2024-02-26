@@ -706,6 +706,10 @@ h1 {
   overflow-y: auto;
 }
 
+.big-text-box {
+  width: 60vw;
+}
+
 #main-container-side-bar {
   display: flex;
   flex-direction: column;
@@ -803,6 +807,11 @@ a {
   flex-direction: column;
   justify-content: space-around;
 }
+
+.create-record-label {
+  position: relative;
+}
+
 #selected-record-fieldset {
   display: flex;
   flex-direction: row;

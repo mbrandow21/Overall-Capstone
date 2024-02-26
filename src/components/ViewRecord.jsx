@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from "react-router-dom";
-import BackButton from './BackButton';
 
+import BackButton from './BackButton';
+import UpdateRecord from './UpdateRecord';
 import {getForeignKeyValue} from './getRecords'
 
 const ViewRecord = ( recordExpression ) => {
@@ -11,11 +12,16 @@ const ViewRecord = ( recordExpression ) => {
   const [tableNameArr, setTableName] = useState();
   const [recordData, setRecordData] = useState();
   const [SingularName, setSingularName] = useState('');
+  const [updateRecord, setUpdateRecord] = useState(false)
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   let { table, record } = useParams();
+
+  const updateButton = () => {
+    setUpdateRecord(!updateRecord)
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -93,6 +99,10 @@ const ViewRecord = ( recordExpression ) => {
   // console.log(recordData)
   if(isLoading) return(<div id="record-display-container" className='main-container'>Loading...</div>)
   if(error) return(<div id="record-display-container" className='main-container'>Error: {error}</div>)
+  if(updateRecord)
+    return(
+      <UpdateRecord data={data} SingularName={SingularName} record={record} recordData={recordData} onCancel={updateButton} />
+      )
   return (
     <div id="record-display-container" className='main-container'>
       <div>
@@ -100,6 +110,7 @@ const ViewRecord = ( recordExpression ) => {
       </div>
       <div>
         <BackButton />
+        <button onClick={() => updateButton()}>Update Record</button>
       </div>
       <fieldset id="selected-record-fieldset">
           {data.map(column => {

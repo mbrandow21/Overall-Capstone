@@ -171,3 +171,67 @@ def createRecord():
         # Log the error
         print(e)
         return jsonify({"error": "Server error"}), 500
+
+
+@api.route('/post/updateRecord', methods=['POST'])
+def updateRecord():
+    auth_header = request.headers.get('Authorization')
+    if auth_header and auth_header.startswith('Bearer '):
+        token = auth_header.split(" ")[1]
+    else:
+        return jsonify({"error": "Bearer token not found"}), 401
+
+    user_id, status_code = authenticateToken(token)
+
+    if status_code != 200:
+        return jsonify({"error": "Authentication failed"}), status_code
+
+    data = request.get_json()  # This method parses the JSON data
+    recordId = data['recordId']
+    tableId = data['tableId']
+    data_dict = data['recordData']
+    # Generate column names and placeholders for values
+    columns = str(', '.join(data_dict.keys()))
+    placeholders = ', '.join(['?'] * len(data_dict))
+    values = str(tuple(data_dict.values()))
+
+
+    formatted_string = str(', '.join([f"{key}='{value}'" if isinstance(value, str) else f"{key}={value}" for key, value in data_dict.items()]))
+
+    print('VALUES', values)
+    print('DATA DICT', data_dict)
+    print('TABLEID', tableId)
+    print('RECORDID', recordId)
+    print('COLUMNS', columns)
+    print('PLACEHOLDERS', placeholders)
+    print('FORMATTED STRING', formatted_string)
+
+    # Prepare the INSERT statement
+    sql = f"EXEC [db_apiUpdateRecord] @UserID = ?, @UpdateStuff = ?, @TableID = ?, @RecordID = ?"
+
+    # # Values to be inserted
+    # values = tuple(data_dict.values())
+
+    # # Get a cursor from the connection
+    connection_string = dbconnection()
+
+    try:
+        with pyodbc.connect(connection_string) as conn:
+            cursor = conn.cursor()
+            try:
+                # Execute the INSERT statement using a cursor
+                cursor.execute(sql, user_id, formatted_string, tableId, recordId)
+                # Commit the transaction
+                conn.commit()
+                print("Data Sent.")
+                return jsonify({"data": "Record Updated Successfully"}), 200
+            except Exception as e:
+                print(f"An error occurred: {e}")
+                # Roll back if there's an error
+                conn.rollback()
+                # It's better to return a generic error message to the client
+                return jsonify({"error": "An error occurred during record insertion"}), 500
+    except pyodbc.Error as e:
+        # Log the error
+        print(e)
+        return jsonify({"error": "Server error"}), 500

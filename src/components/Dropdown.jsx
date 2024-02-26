@@ -29,10 +29,10 @@ const getDropdown = ( props, accessToken ) => {
   };
 }
 
-const Dropdown = ( {props, onDropdownChange} ) => {
+const Dropdown = ( {props, onDropdownChange, currentFK} ) => {
   const [ display, setDisplay ] = useState( 'none' )
   const [ dropData, setDropData ] = useState([])
-  const [ selectedRecord, setSelectedRecord ] = useState(props)
+  const [ selectedRecord, setSelectedRecord ] = useState(currentFK || props)
 
   const accessToken = localStorage.getItem('token');
   
@@ -59,6 +59,10 @@ const Dropdown = ( {props, onDropdownChange} ) => {
       getDropdownData().then(dropData => {
         const moreData = dropData[0]
         setDropData(moreData)
+        if(selectedRecord === currentFK){
+          const defaultExpression = moreData.find(data => (data.PK === currentFK))
+          clickRecord(defaultExpression.Expression , currentFK)
+        }
       })
     }
   },[ props, accessToken ])

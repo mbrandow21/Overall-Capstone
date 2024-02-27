@@ -11,6 +11,9 @@ html {
 	color: #222;
 	background-color: #ce8e4a;
 }
+body{
+	height:100%;
+}
 
 main {
 	display: flex;
@@ -166,4 +169,9 @@ h1 {
 .big-text-box {
 	width: 60vw;
 	// height: 200px;
+}
+.fullscreen-container {
+	height: 100%;
+	width: 100%;
+	overflow: auto;
 }

@@ -50,41 +50,43 @@ const Login = () => {
     // };
 
     return (
-        <form id="login-form-container" onSubmit={handleLogin}>
-            <div id="sign-in-container">
-                <h1>Sign In</h1>
-            </div>
-            <div id="username-container">
-                <input 
-                    className="input100" 
-                    type="text" 
-                    name="username" 
-                    placeholder=" " 
-                    required
-                    id="username"
-                    value={username}
-                    onChange={e => setUsername(e.target.value)}
-                />
-                <label htmlFor="username">Username</label>
-            </div>
-            <div id="password-container">
-                <input 
-                    className="focus-input100" 
-                    type="password"
-                    name="password" 
-                    placeholder=" " 
-                    required
-                    id="password"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                />
-                <label htmlFor="password">Password</label>
-            </div> 
-            <div id="button-container">   
-                <p id="forhelp-contacts">For help, <a href="www.contacts" id="help-contacts">contact</a> an admin</p>
-                <button id="login-button" type="submit">Login</button> 
-            </div>
-        </form>
+        <div className="fullscreen-container">
+            <form id="login-form-container" onSubmit={handleLogin}>
+                <div id="sign-in-container">
+                    <h1>Sign In</h1>
+                </div>
+                <div id="username-container">
+                    <input 
+                        className="input100" 
+                        type="text" 
+                        name="username" 
+                        placeholder=" " 
+                        required
+                        id="username"
+                        value={username}
+                        onChange={e => setUsername(e.target.value)}
+                    />
+                    <label htmlFor="username">Username</label>
+                </div>
+                <div id="password-container">
+                    <input 
+                        className="focus-input100" 
+                        type="password"
+                        name="password" 
+                        placeholder=" " 
+                        required
+                        id="password"
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                    />
+                    <label htmlFor="password">Password</label>
+                </div> 
+                <div id="button-container">   
+                    <p id="forhelp-contacts">For help, <a href="www.contacts" id="help-contacts">contact</a> an admin</p>
+                    <button id="login-button" type="submit">Login</button> 
+                </div>
+            </form>
+        </div>
     );
 };
 

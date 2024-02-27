@@ -7,16 +7,12 @@ body {
 
 #login-form-container {
   text-align: center;
-  display: flex;
-  flex-direction: column;
   /* outline: solid 1px black; */
-  width: 35vw;
-  height: 50vh;
+  padding-block: 10vh;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 9%;
   background-color: #f3f2f2;
-  box-shadow: 0 2px 6px rgb(0, 0, 0);
+  box-shadow: 0 0 10px 3px rgb(0, 0, 0);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   border-radius: 2%;
 }
@@ -55,7 +51,6 @@ body {
   }
   #login-form-container {
     width: 50%; /* Adjust width for smaller screens */
-    height: 500px; /* Adjust height for smaller screens */
     margin-top: 5%; /* Adjust margin for smaller screens */
   }
   #button-container {
@@ -236,6 +231,10 @@ textarea:valid + label {
   grid-template-columns: 20% auto auto;
   height: 100vh;
   grid-template-rows: 25vh auto;
+}
+
+.webpage {
+  font-size: 7rem;
 }
 
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
@@ -565,6 +564,10 @@ html {
   background-color: #ce8e4a;
 }
 
+body {
+  height: 100%;
+}
+
 main {
   display: flex;
   align-items: flex-start;
@@ -708,6 +711,12 @@ h1 {
 
 .big-text-box {
   width: 60vw;
+}
+
+.fullscreen-container {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
 }
 
 #main-container-side-bar {

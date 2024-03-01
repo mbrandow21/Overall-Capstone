@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from "react-router-dom";
 
-function DataDisplay() {
+import Loading from './Loading';
+import CreateRecord from './CreateRecord'
+
+function DataDisplay({table}) {
   const accessToken = localStorage.getItem('token');
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -10,13 +12,17 @@ function DataDisplay() {
   const [error, setError] = useState(null);
   const [singularExpression, setSingularExpression] = useState('None');
 
-  let { table } = useParams();
+  const [showCreateRecord, setShowCreateRecord] = useState(false);
+
+  const handleButtonClick = () => {
+    setShowCreateRecord(!showCreateRecord);
+  };
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchData = async () => {
-      setIsLoading(true);
       setError(null); // Reset error state on each attempt
-      if (table && table != 0) try {
+      if (table && table !== 0) try {
         const response = await axios({
           method: "POST",
           url: "http://localhost:5000/api/post/procedure",
@@ -66,17 +72,22 @@ function DataDisplay() {
   // Protect against cases where data might be null or empty
   const headers = data.length > 0 ? Object.keys(data[0]) : [];
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div><Loading /></div>;
   if (error) return <div>Error: {error}</div>;
 
-  if (!table || table == 0) return (
+  if (!table || table === 0) return (
     <div><h1>Welcome Home</h1></div>
+  ) 
+  if (showCreateRecord === true) return (
+    <CreateRecord table={table} backButton={handleButtonClick}/>
   )
   else return (
     <div id="record-display-container" className='main-container'>
       <div className="record-display-container">
-        {singularExpression.length > 0 && singularExpression[0].Allow_New_Button == true && (
-          <a href={`${window.location.origin}/${table}/0`}><button><h2>New {singularExpression[0].Singular_Name}</h2></button></a>
+        {singularExpression.length > 0 && singularExpression[0].Allow_New_Button === true && (
+          <button onClick={handleButtonClick}>
+            <h2>New {singularExpression[0].Singular_Name}</h2>
+          </button>
         )}
         <input
           type="text"

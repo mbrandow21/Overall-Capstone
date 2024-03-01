@@ -2,7 +2,6 @@ import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
 
-
 const checkAccessToken = async (token) => await axios({
     method: 'POST',
     url: `http://localhost:5000/auth/checkauth`,
@@ -36,6 +35,7 @@ export const AuthProvider = ({ children}) => {
 
   const [isAuthenticated, setAuthentication] = useState();
   const accessToken = localStorage.getItem('token');
+
 
   useEffect(() => {
     if (accessToken) {

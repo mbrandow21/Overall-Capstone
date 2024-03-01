@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
 
 import DataDisplay from './DataDisplay';
-import CreateRecord from './CreateRecord';
-import ViewRecord from './ViewRecord';
 import { getPagesInformation } from './getRecords'
+import ViewRecord from './ViewRecord'
 
 function DataGrid() {
   let { table, record } = useParams();
@@ -22,11 +21,14 @@ function DataGrid() {
       })
     }
   },[ table ])
+  // return (
+  //   <DataDisplay table={table}/>
+  // )
   if(!record) return (
-    <DataDisplay />
+    <DataDisplay table={table}/>
   );
-  else if(record == 0) return (
-    <CreateRecord />
+  else if(record === 0) return (
+    <div>This isn't a record</div>
   );
   else return (
     <ViewRecord recordExpression={recordExpression}/>

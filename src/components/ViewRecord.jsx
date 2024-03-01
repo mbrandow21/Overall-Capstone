@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from "react-router-dom";
+import { confirmAlert } from 'react-confirm-alert'; // https://www.npmjs.com/package/react-confirm-alert?activeTab=readme
 
 import BackButton from './BackButton';
 import UpdateRecord from './UpdateRecord';
@@ -21,6 +22,45 @@ const ViewRecord = ( recordExpression ) => {
 
   const updateButton = () => {
     setUpdateRecord(!updateRecord)
+  }
+
+  const deleteRecord = async () => {
+    console.log("Deleting:", table, record)
+    setIsLoading(true)
+    const recordDelete = await axios({
+      method: "DELETE",
+      url: "http://localhost:5000/api/delete/deleteRecord",
+      params: {
+        tableID: table,
+        recordID: record
+      },
+      headers: {
+        Authorization: 'Bearer ' + accessToken,
+        "Content-Type": "Application/JSON"
+      },
+    });
+    console.log(recordDelete.data)
+    window.history.back()
+    if (recordDelete.status === 401) {
+      // Handle unauthorized access
+      console.log('Unauthorized access. Redirecting to login.');
+      window.location = '/login';
+    }
+  }
+  const alert = () => {
+    confirmAlert({
+      title: `Are you sure you want to delete this record?`,
+      message: 'This action is not reversable.',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => (deleteRecord())
+        },
+        {
+          label: 'No',
+        }
+      ]
+    });
   }
 
   useEffect(() => {
@@ -99,6 +139,7 @@ const ViewRecord = ( recordExpression ) => {
   // console.log(recordData)
   if(isLoading) return(<div id="record-display-container" className='main-container'>Loading...</div>)
   if(error) return(<div id="record-display-container" className='main-container'>Error: {error}</div>)
+  if(!data) return (<div>There is no data here</div>)
   if(updateRecord)
     return(
       <UpdateRecord data={data} SingularName={SingularName} record={record} recordData={recordData} onCancel={updateButton} />
@@ -111,6 +152,7 @@ const ViewRecord = ( recordExpression ) => {
       <div>
         <BackButton />
         <button onClick={() => updateButton()}>Update Record</button>
+        <button onClick={() => alert()}>Delete Record</button>
       </div>
       <fieldset id="selected-record-fieldset">
           {data.map(column => {

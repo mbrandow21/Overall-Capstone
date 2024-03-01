@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from "react-router-dom";
 
 import Dropdown from './Dropdown';
-import DropdownElement from './DropdownElement';
-import BackButton from './BackButton';
+import Loading from './Loading';
 
 
-const CreateRecord = () => {
+const CreateRecord = ({table, backButton}) => {
   const accessToken = localStorage.getItem('token');
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -15,8 +13,6 @@ const CreateRecord = () => {
   const [validationError, setValidationError] = useState(false);
   const [tableNameArr, setTableName] = useState();
 
-
-  let { table } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -124,11 +120,11 @@ const CreateRecord = () => {
     }
   };
   
-  if(isLoading) return(<div>Loading...</div>)
+  if(isLoading) return(<div><Loading /></div>)
   if(error) return(<div>Error: {error}</div>)
   return (
     <div id="record-display-container" className='main-container'>
-      <BackButton />
+        <div><button onClick={backButton}>Go Back</button></div>
       <form onSubmit={handleSubmit} id="create-record-form">
         {data.map(column => {
           if (column.PK === "TRUE") return null; // Skip primary keys
@@ -137,7 +133,7 @@ const CreateRecord = () => {
           switch(column.DATA_TYPE) {
             case "nvarchar":
             case "varchar":
-              inputField = column.CHARACTER_MAXIMUM_LENGTH >= 254 ? 
+              inputField = column.CHARACTER_MAXIMUM_LENGTH >= 254 | column.CHARACTER_MAXIMUM_LENGTH === -1 ? 
                 <textarea rows="5" className='big-text-box' maxLength={column.CHARACTER_MAXIMUM_LENGTH} onChange={e => handleChange(column.COLUMN_NAME, e.target.value)}></textarea> :
                 <input type="text" maxLength={column.CHARACTER_MAXIMUM_LENGTH} onChange={e => handleChange(column.COLUMN_NAME, e.target.value)} />;
               break;

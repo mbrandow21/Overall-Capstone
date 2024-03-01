@@ -42,14 +42,15 @@ const UpdateRecord = ({ data, SingularName, record, recordData, onCancel }) => {
         headers: {
           Authorization: 'Bearer ' + accessToken,
           "Content-Type": "Application/JSON",
-        },
-      });
+        }
+      })
 
       // Handle response or redirection as needed
       console.log("Record updated successfully:", response.data);
     } catch (error) {
       console.error("Failed to update record:", error);
     }
+    window.location.reload();
   };
 
   return (
@@ -73,7 +74,7 @@ const UpdateRecord = ({ data, SingularName, record, recordData, onCancel }) => {
             switch(column.DATA_TYPE) {
               case "nvarchar":
               case "varchar":
-                inputField = column.CHARACTER_MAXIMUM_LENGTH >= 254 ? 
+                inputField = column.CHARACTER_MAXIMUM_LENGTH >= 254 | column.CHARACTER_MAXIMUM_LENGTH === -1 ? 
                   <textarea rows="5" className='big-text-box' maxLength={column.CHARACTER_MAXIMUM_LENGTH} onChange={e => handleChange(column.COLUMN_NAME, e.target.value)} value={label}></textarea> :
                   <input type="text" maxLength={column.CHARACTER_MAXIMUM_LENGTH} onChange={e => handleChange(column.COLUMN_NAME, e.target.value)} value={label} />;
                 break;

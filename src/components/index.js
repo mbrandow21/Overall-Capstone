@@ -3,6 +3,7 @@ import Header from './Header.jsx'
 import DataGrid from './DataGrid.jsx'
 import DynamicIconComponent from './DynamicIcons.jsx'
 import BackButton from './BackButton.jsx'
+import Loading from './Loading.jsx'
 
 export {
   Navbar,
@@ -10,4 +11,5 @@ export {
   ,DataGrid,
   DynamicIconComponent
   ,BackButton
+  ,Loading
 }

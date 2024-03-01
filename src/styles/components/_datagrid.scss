@@ -1,20 +1,25 @@
 #record-display-container {
+  background: white;
   // padding: 15px;
   grid-area: content;
+  overflow-x: auto;
   table {
     border-collapse: collapse;
-    width: 100%;
+    min-width: 100%;
     table-layout: fixed;
+    border-collapse: collapse;
+  tr:hover {background-color: #f7f1e3;}
+  tr {
+    border-bottom: 1px solid #2c3e50;
   }
   th {
-    text-align: left;
-    margin-right: 1rem;
+    background-color: #2e2d2b;
+    color: #f7f1e3;
   }
   th, td {
-    padding: .1rem;
-    border: 1px solid #888;
-    max-width: 200px; // Adjust based on your layout needs
-    overflow-wrap: break-word,
+    padding: 8px;
+    text-align: left;
+  }
   }
   .record-display-container{
     button {

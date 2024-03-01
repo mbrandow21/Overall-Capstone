@@ -9,7 +9,7 @@ html {
 	font-family: "Roboto", sans-serif;
 	font-weight: 300;
 	color: #222;
-	background-color: #ce8e4a;
+	background-color: #f7f1e3;
 }
 body{
 	height:100%;
@@ -157,9 +157,9 @@ h1 {
 }
 .main-container {
 	background-color: rgba(255, 255, 255, 0.5);
-	outline: 2px solid rgba(201, 106, 46, 0.307);
+	// outline: 2px solid rgba(201, 106, 46, 0.307);
 
-	outline-offset: -2px;
+	// outline-offset: -2px;
 	// backdrop-filter: blur(8px);
 	// box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 
@@ -174,4 +174,9 @@ h1 {
 	height: 100%;
 	width: 100%;
 	overflow: auto;
+	background: #ecf0f1;
+}
+#content {
+	height: 100%;
+	background:#f7f1e3;
 }

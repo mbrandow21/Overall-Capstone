@@ -1,84 +1,56 @@
 import time
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import *
+import os
 from dotenv import load_dotenv
 import pyodbc
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail, To
 from dbconnection import dbconnection
-import os
+
 load_dotenv()
 
-# This is the function that will be the logic behind the Audit's being sent
-# Checks every 5 minutes to see if emails need to be sent.
-def audit_invocations():
-  while True:
-    new_audits = check_for_new_audits()
-    if new_audits:
-      for audit in new_audits:
-        sendAudit(audit)
-    time.sleep(5)
-  
-  # This checks to see if there are any new "Audits" that need to go out.
-  # If there are any new audits, pass the ID of that audit.
-def check_for_new_audits():
-  # string = [{"Audit_ID": 1,},{"Audit_ID": 2}]
-  connection_string = dbconnection()
-  with pyodbc.connect(connection_string) as connection:
-    with connection.cursor() as cursor:
-      try:
-        cursor.execute("SELECT A.Audit_ID FROM Audits A WHERE A.Audit_ID=5")
-        rows=cursor.fetchall()
-        if (rows):
-          return(rows)
-        else: return None
-      except pyodbc.IntegrityError:
-        # Handle duplicate usernames
-        return None
-      except pyodbc.Error as e:
-        # Handle other database errors
-        print("Database error:", e)
-        return None
+class AuditNotifier:
+    def __init__(self):
+        self.connection_string = dbconnection()
+        self.sendgrid_key = os.environ.get("SENDGRID_KEY")
     
-  # This runs the logic to pass into sendAuditEmails to successfully send the emails.
-def sendAudit(Audit):
-  # sendAuditEmails(fromEmail='jmcdonald46@my.gcu.edu', toEmails='basemasonb@gmail.com', 
-  #                 templateID='d-a6f21258e2c04655b93b41397127ccac')
-  auditID = (Audit[0])
-  sql = 'EXEC api_CORE_SendAuditInformation @auditID=?'
-  connection_string = dbconnection()
+    def run(self):
+        while True:
+            new_audits = self.check_for_new_audits()
+            if new_audits:
+                for audit in new_audits:
+                    self.send_audit(audit)
+            time.sleep(300)
+    
+    def check_for_new_audits(self):
+        with pyodbc.connect(self.connection_string) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT Audit_ID FROM Audits WHERE Audit_ID = 5")
+                rows = cursor.fetchall()
+                return rows if rows else None
 
-  with pyodbc.connect(connection_string) as connection:
-    with connection.cursor() as cursor:
-      try:
-        cursor.execute(sql, auditID)
-        rows=cursor.fetchall()
-        toEmails = [row[0] for row in rows]
-        cursor.nextset()
-        rows2=cursor.fetchall()
-        fromEmail = rows2
-        print(toEmails)
-        print('From:', fromEmail)
-        sendAuditEmails(fromEmail=fromEmail[0][0], toEmails=toEmails, templateID='d-a6f21258e2c04655b93b41397127ccac')
-      except pyodbc.IntegrityError:
-        # Handle duplicate usernames
-        return None
-      except pyodbc.Error as e:
-        
-        # Handle other database errors
-        print("Database error:", e)
-        return None
+    def send_audit(self, audit):
+        audit_id = audit[0]
+        to_emails, from_email = self.fetch_audit_emails(audit_id)
+        if to_emails and from_email:
+            self.send_audit_emails(from_email, to_emails, templateID='d-a6f21258e2c04655b93b41397127ccac')
 
-  # Send the SendGrid emails with passed in parameters.
-def sendAuditEmails(fromEmail, toEmails, templateID=None, template=None):
-  message = Mail(
-      from_email=fromEmail,
-      to_emails= To(toEmails)
-  )
+    def fetch_audit_emails(self, audit_id):
+        sql = 'EXEC api_CORE_SendAuditInformation @auditID=?'
+        with pyodbc.connect(self.connection_string) as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(sql, audit_id)
+                to_emails = [row[0] for row in cursor.fetchall()]
+                cursor.nextset()
+                from_email = cursor.fetchall()[0][0]
+                return to_emails, from_email
 
-  if (templateID):
-    message.template_id = templateID
-  if (template):
-    message.dynamic_template_data = template
-
-  sg = SendGridAPIClient(api_key=(os.environ.get("SENDGRID_KEY")))
-  response = sg.send(message)
-  print(response.status_code, response.body, response.headers)
+    def send_audit_emails(self, from_email, to_emails, templateID=None, template=None):
+        message = Mail(
+            from_email=from_email, 
+            to_emails=[To(email) for email in to_emails]
+            )
+        if templateID:
+            message.template_id = templateID
+        sg = SendGridAPIClient(api_key=self.sendgrid_key)
+        response = sg.send(message)
+        print(response.status_code, response.body, response.headers)

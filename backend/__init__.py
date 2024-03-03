@@ -1,22 +1,24 @@
 import os
 from flask import Flask, jsonify, request
-from threading import Thread
 from flask_cors import CORS
 from auth import auth
 from api import api
 from handleEmails import emails
-from background import audit_invocations
+
+from background import AuditNotifier
+from threading import Thread
 
 app = Flask(__name__)
 CORS(app)
 
 def create_app():
     """Application factory function to create and configure the Flask app."""
-    
 
-    thread = Thread(target=audit_invocations)
-    thread.daemon = True  # Daemonize thread
+    audit_notifier = AuditNotifier()  # Assuming you need to instantiate it
+    thread = Thread(target=audit_notifier.run)
+    thread.daemon = True  # Optionally make it a daemon thread
     thread.start()
+
     # Create and configure the app
     app = Flask(__name__, instance_relative_config=True)
 
@@ -41,8 +43,15 @@ def create_app():
 
     CORS(app, origins=["https://yourfrontend.com", "http://localhost:3000"])
 
-    
+
     return app
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# Adjust this part of your code
+# if __name__ == '__main__':
+#     app = create_app()  # Use the factory function to create the app
+#     if not app.debug or os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
+#         audit_notifier = AuditNotifier()  # Assuming you need to instantiate it
+#         thread = Thread(target=audit_notifier.run)
+#         thread.daemon = True  # Optionally make it a daemon thread
+#         thread.start()
+#     app.run(debug=True)

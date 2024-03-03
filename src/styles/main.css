@@ -778,6 +778,7 @@ a {
   background: white;
   grid-area: content;
   overflow-x: auto;
+  height: 100%;
 }
 #record-display-container table {
   border-collapse: collapse;

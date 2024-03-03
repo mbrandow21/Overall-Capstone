@@ -1,9 +1,9 @@
 from flask import request, jsonify, Response
 from . import api  # Import the Blueprint you defined in flaskr/auth/__init__.py
 from flask import Flask, request
-from ..tokens import authenticateToken
+from tokens import authenticateToken
 import pyodbc
-from ..dbconnection import dbconnection
+from dbconnection import dbconnection
 import base64
 import json
 from .functions import custom_serializer

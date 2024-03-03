@@ -1,8 +1,8 @@
 from flask import jsonify
 import pyodbc
 import bcrypt
-from ..dbconnection import dbconnection
-from ..tokens import assign_token
+from dbconnection import dbconnection
+from tokens import assign_token
 
 def verify_user(username, password):
     connection_string = dbconnection()

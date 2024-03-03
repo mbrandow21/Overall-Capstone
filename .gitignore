@@ -26,3 +26,6 @@ yarn-error.log*
 #pycache
 /*__pycache__*
 *.pyc
+
+Scripts
+Lib

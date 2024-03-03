@@ -2,8 +2,7 @@ from flask import jsonify, request
 from . import auth  # Import the Blueprint you defined in flaskr/auth/__init__.py
 from .user_creation import create_user
 from .user_verification import verify_user
-from ..tokens import authenticateToken
-import jwt
+from tokens import authenticateToken
 
 @auth.route('/register', methods=['POST'])
 def register():

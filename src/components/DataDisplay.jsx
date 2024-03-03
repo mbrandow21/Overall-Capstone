@@ -76,7 +76,10 @@ function DataDisplay({table}) {
   if (error) return <div>Error: {error}</div>;
 
   if (!table || table === 0) return (
-    <div><h1>Welcome Home</h1></div>
+    <div id="record-display-container" className='main-container'>
+      <h1>Welcome To Ap@te</h1>
+      <p><br></br>Our Vision: Provide tools, software and strategies for small and medium businesses to perform ethical email audits and  enable these businesses to monitor and analyze the results to strengthen their security culture.</p>
+    </div>
   ) 
   if (showCreateRecord === true) return (
     <CreateRecord table={table} backButton={handleButtonClick}/>

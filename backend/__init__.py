@@ -14,10 +14,12 @@ CORS(app)
 def create_app():
     """Application factory function to create and configure the Flask app."""
 
-    audit_notifier = AuditNotifier()  # Assuming you need to instantiate it
-    thread = Thread(target=audit_notifier.run)
-    thread.daemon = True  # Optionally make it a daemon thread
-    thread.start()
+
+    ###### TAKE COMMENTS OUT OF BELOW 4 LINES TO START THE EMAIL CHECKER ########
+    # audit_notifier = AuditNotifier()  # Assuming you need to instantiate it
+    # thread = Thread(target=audit_notifier.run)
+    # thread.daemon = True  # Optionally make it a daemon thread
+    # thread.start()
 
     # Create and configure the app
     app = Flask(__name__, instance_relative_config=True)

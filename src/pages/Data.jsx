@@ -44,15 +44,16 @@ const DataFetcher = () => {
 
   return (
     <div>
-      {isLoading && <p>Loading...</p>}
+      {/* {isLoading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
       {data && (
         <div>
           <h2>Data Fetched</h2>
           {/* Render your data here */}
-          <pre>{JSON.stringify(data, null, 2)}</pre>
+          {/* <pre>{JSON.stringify(data, null, 2)}</pre>
         </div>
-      )}
+      )} */}
+      <h1>Hello World</h1>
     </div>
   );
 };

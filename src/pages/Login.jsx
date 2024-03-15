@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import background from '../assets/FgyMountOriginal.png';
+
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -31,8 +33,7 @@ const Login = () => {
                 // Storing the token in localStorage or sessionStorage
                 localStorage.setItem('token', data.token); // For localStorage
                 // sessionStorage.setItem('token', data.token); // For sessionStorage
-    
-                alert('Login successful!');
+
                 window.location = '/';
             } else {
                 alert('Login successful, but no token received');
@@ -43,49 +44,40 @@ const Login = () => {
             alert('Login failed. Please check your credentials and try again.');
         });
     };
-    // const handleKeyDown = (e) => {
-    //     if (e.key === 'Enter') {
-    //         handleLogin();
-    //     }      
-    // };
 
     return (
         <div className="fullscreen-container">
-            <form id="login-form-container" onSubmit={handleLogin}>
-                <div id="sign-in-container">
-                    <h1>Sign In</h1>
+            <div className="fullscreen-background">
+                <img src={background} alt="mountain scene" />
+                <div className="gradient-overlay"></div>
+            </div>
+            <div className="content-row">
+                <div className="column">
+                    <div className="welcome-card">
+                        <h1>Welcome to Apate!</h1>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate earum deserunt velit neque rem in sed placeat voluptates exercitationem provident.</p>
+                    </div>
                 </div>
-                <div id="username-container">
-                    <input 
-                        className="input100" 
-                        type="text" 
-                        name="username" 
-                        placeholder=" " 
-                        required
-                        id="username"
-                        value={username}
-                        onChange={e => setUsername(e.target.value)}
-                    />
-                    <label htmlFor="username">Username</label>
+                <div className="column login-section">
+                    <form onSubmit={e=>handleLogin(e)} className="login-form">
+                        <h2>Sign in</h2>
+                        <div className="input-container">
+                            <label htmlFor="username">Username:</label>
+                            <input type="text"  id="username" value={username} onChange={e=>setUsername(e.target.value)} />
+                        </div>
+                        <div className="input-container">
+                            <label htmlFor="password">Password:</label>
+                            <input type="password"  id="password" value={password} onChange={e=>setPassword(e.target.value)} />
+                        </div>
+                        <div className="options-row">
+                            <input type="checkbox" id="remember" />
+                            <label htmlFor="remember">Remember Me</label>
+                            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Forgot Password?</a>
+                        </div>
+                        <button type="submit">Login</button>
+                    </form>
                 </div>
-                <div id="password-container">
-                    <input 
-                        className="focus-input100" 
-                        type="password"
-                        name="password" 
-                        placeholder=" " 
-                        required
-                        id="password"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                    />
-                    <label htmlFor="password">Password</label>
-                </div> 
-                <div id="button-container">   
-                    <p id="forhelp-contacts">For help, <a href="www.contacts" id="help-contacts">contact</a> an admin</p>
-                    <button id="login-button" type="submit">Login</button> 
-                </div>
-            </form>
+            </div>
         </div>
     );
 };

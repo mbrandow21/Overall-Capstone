@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+const fetchURL = 'https://apate-backend.azurewebsites.net'
 
 const Registration = () => {
     const [username, setUsername] = useState('');
@@ -8,7 +9,7 @@ const Registration = () => {
         e.preventDefault(); // Prevents the default form submission action
 
         // Sends a POST request to the '/auth/registration' endpoint
-        fetch('http://127.0.0.1:5000/auth/register', {
+        fetch(`${fetchURL}/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

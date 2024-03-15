@@ -48,15 +48,11 @@
         position: relative;
         display: grid;
         place-items: center;
-        padding-inline: 6rem;
+        padding-inline: 4rem;
         width: 100%;
 
-        &:first-of-type {
-            justify-content: flex-end;
-        }
-
-        &:last-of-type {
-            justify-content: flex-start;
+        @media screen and (max-width:1024px) {
+            padding-inline: 2rem;
         }
     }
 
@@ -69,15 +65,18 @@
     }
 }
 
-.welcome-card {
-    width: 100%;
+.welcome-card,
+.login-form {
+    width: 35vw;
     max-width: 650px;
-    // max-width: 700px;
-    box-sizing: border-box;
+}
+
+.welcome-card {
+    margin-left: auto;
 
     h1 {
-        font-size: 5rem;
-        line-height: 5rem;
+        font-size: clamp(3rem, 4vw, 4rem);
+        line-height: clamp(3rem, 4vw, 4rem);
     }
 
     p {
@@ -87,8 +86,7 @@
 }
 
 .login-form {
-    box-sizing: border-box;
-    width: 650px;
+    margin-right: auto;
 
     h2 {
         font-size: 3rem;

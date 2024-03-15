@@ -41,14 +41,13 @@
   position: relative;
   display: grid;
   place-items: center;
-  padding-inline: 6rem;
+  padding-inline: 4rem;
   width: 100%;
 }
-.content-row .column:first-of-type {
-  justify-content: flex-end;
-}
-.content-row .column:last-of-type {
-  justify-content: flex-start;
+@media screen and (max-width: 1024px) {
+  .content-row .column {
+    padding-inline: 2rem;
+  }
 }
 .content-row .login-section {
   background-color: rgba(255, 255, 255, 0.2666666667);
@@ -59,14 +58,18 @@
   padding-right: 100px;
 }
 
-.welcome-card {
-  width: 100%;
+.welcome-card,
+.login-form {
+  width: 35vw;
   max-width: 650px;
-  box-sizing: border-box;
+}
+
+.welcome-card {
+  margin-left: auto;
 }
 .welcome-card h1 {
-  font-size: 5rem;
-  line-height: 5rem;
+  font-size: clamp(3rem, 4vw, 4rem);
+  line-height: clamp(3rem, 4vw, 4rem);
 }
 .welcome-card p {
   margin: 1rem 0;
@@ -74,8 +77,7 @@
 }
 
 .login-form {
-  box-sizing: border-box;
-  width: 650px;
+  margin-right: auto;
 }
 .login-form h2 {
   font-size: 3rem;

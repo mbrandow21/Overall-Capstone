@@ -4,6 +4,21 @@ import axios from 'axios';
 import Dropdown from './Dropdown';
 import Loading from './Loading';
 
+function formatDateTimeForSQLServer(datetimeLocalValue) {
+  // Create a Date object from the input value
+  const date = new Date(datetimeLocalValue);
+
+  // Format the date and time in a way that SQL Server explicitly accepts
+  // e.g., "YYYY-MM-DD HH:MM:SS"
+  const formattedDate = date.getFullYear() + '-' +
+                        ('0' + (date.getMonth() + 1)).slice(-2) + '-' +
+                        ('0' + date.getDate()).slice(-2) + ' ' +
+                        ('0' + date.getHours()).slice(-2) + ':' +
+                        ('0' + date.getMinutes()).slice(-2) + ':' +
+                        ('0' + date.getSeconds()).slice(-2);
+
+  return formattedDate;
+}
 
 const CreateRecord = ({table, backButton}) => {
   const accessToken = localStorage.getItem('token');
@@ -140,6 +155,7 @@ const CreateRecord = ({table, backButton}) => {
             case "int":
               inputField = column.FK ?
                 <Dropdown props={column.FK} onDropdownChange={(selectedValue) => handleChange(column.COLUMN_NAME, selectedValue)} /> :
+              
                 <input type="number" onChange={e => handleChange(column.COLUMN_NAME, parseInt(e.target.value, 10))} />;
               break;
             case "bit":
@@ -148,6 +164,13 @@ const CreateRecord = ({table, backButton}) => {
                   <input type="radio" name={column.COLUMN_NAME} value="Yes" onChange={e => handleChange(column.COLUMN_NAME, true)} /> Yes
                   <input type="radio" name={column.COLUMN_NAME} value="No" onChange={e => handleChange(column.COLUMN_NAME, false)} /> No
                   {column.IS_NULLABLE === "YES" && <button type="button" onClick={() => handleChange(column.COLUMN_NAME, null)}>N/A</button>}
+                </>
+              )
+              break;
+            case "datetime2":
+              inputField = (
+                <>
+                  <input type="datetime-local" onChange={e => handleChange(column.COLUMN_NAME, formatDateTimeForSQLServer(e.target.value))} />
                 </>
               );
               break;

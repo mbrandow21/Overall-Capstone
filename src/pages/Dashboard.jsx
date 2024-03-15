@@ -6,7 +6,7 @@ import { Header, Navbar, DataGrid } from '../components';
 const Dashboard = () => {
   const accessToken = localStorage.getItem('token');
   // Initialize navBarData from localStorage if available
-  const initialNavBarData = JSON.parse(localStorage.getItem('navBar')) || [];
+  const initialNavBarData = localStorage.getItem('navBar') ? JSON.parse(localStorage.getItem('navBar')) : [];
   const [sidebarWidth, setSidebarWidth] = useState('20%');
   const [isLoading, setIsLoading] = useState(true);
 
@@ -51,7 +51,7 @@ const Dashboard = () => {
     } else {
       setIsLoading(false); // Set loading to false if data is already available
     }
-  }, []); // Empty dependency array ensures this runs only once on mount
+  }, [fetchData, initialNavBarData]); // Empty dependency array ensures this runs only once on mount
 
   const handleDrag = (e) => {
     e.preventDefault();

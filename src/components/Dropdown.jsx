@@ -30,25 +30,21 @@ const getDropdown = ( props, accessToken ) => {
 }
 
 const Dropdown = ( {props, onDropdownChange, currentFK} ) => {
-  const [ display, setDisplay ] = useState( 'none' )
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Changed to manage open state
   const [ dropData, setDropData ] = useState([])
-  const [ selectedRecord, setSelectedRecord ] = useState(currentFK || props)
+  const [ selectedRecord, setSelectedRecord ] = useState('Select a record:' || props)
 
   const accessToken = localStorage.getItem('token');
   
   const handleClick = () => {
-    if (display === 'none') {
-      setDisplay( 'block' )
-    } else {
-      setDisplay ( 'none' )
-    }
-  }
+    setIsDropdownOpen(!isDropdownOpen); // Toggle open state
+  };
 
   const clickRecord = (expression, PK) => {
-    setSelectedRecord(expression)
-    setDisplay('none')
-    onDropdownChange(PK)
-  }
+    setSelectedRecord(expression);
+    setIsDropdownOpen(false); // Close dropdown when an item is clicked
+    onDropdownChange(PK);
+  };
 
   useEffect(() => {
     if (props !== undefined) {
@@ -68,21 +64,19 @@ const Dropdown = ( {props, onDropdownChange, currentFK} ) => {
   },[ props, accessToken ])
 
   return (
-    <div>
-      <div onClick={handleClick}>
+    <div className="dropdown-container">
+      <div className="dropdown-display" onClick={handleClick}>
         {selectedRecord}
       </div>
-      <div style={{display:display}}>
-        {dropData.map(data => {
-          return (
-            <div key={data.PK} onClick={() => clickRecord(data.Expression, data.PK)}>
-              {data.Expression}
-            </div>
-          )
-        })}
+      <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
+        {dropData.map(data => (
+          <div key={data.PK} className="dropdown-item" onClick={() => clickRecord(data.Expression, data.PK)}>
+            {data.Expression}
+          </div>
+        ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Dropdown
+export default Dropdown;

@@ -14,7 +14,8 @@ const DataFetcher = () => {
     try {
       const response = await axios({
         method: "GET",
-        url: "http://localhost:5000/api/get",
+        // url: "http://127.0.0.1:5000/api/get",
+        url: "https://apate-backend.azurewebsites.net/api/get",
         params: {
           from:"Users",
         },
@@ -40,20 +41,19 @@ const DataFetcher = () => {
 
   useEffect(() => {
     fetchData();
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, [fetchData]); // Empty dependency array means this effect runs once on mount
 
   return (
     <div>
-      {/* {isLoading && <p>Loading...</p>}
+      {isLoading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
       {data && (
         <div>
           <h2>Data Fetched</h2>
-          {/* Render your data here */}
-          {/* <pre>{JSON.stringify(data, null, 2)}</pre>
+          {/* Render your data here*/}
+          <pre>{JSON.stringify(data, null, 2)}</pre>
         </div>
-      )} */}
-      <h1>Hello World</h1>
+      )}
     </div>
   );
 };

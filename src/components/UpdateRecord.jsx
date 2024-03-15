@@ -90,15 +90,15 @@ const UpdateRecord = ({ data, SingularName, record, recordData, onCancel }) => {
                       type="radio"
                       name={column.COLUMN_NAME}
                       value="Yes"
-                      checked={label === true}
-                      onChange={e => handleChange(column.COLUMN_NAME, true)}
+                      checked={label === 1 || label===true}
+                      onChange={e => handleChange(column.COLUMN_NAME, 1)}
                     /> Yes
                     <input
                       type="radio"
                       name={column.COLUMN_NAME}
                       value="No"
-                      checked={label === false}
-                      onChange={e => handleChange(column.COLUMN_NAME, false)}
+                      checked={label === 0 || label===false}
+                      onChange={e => handleChange(column.COLUMN_NAME, 0)}
                     /> No
                     {column.IS_NULLABLE === "YES" && (
                       <>

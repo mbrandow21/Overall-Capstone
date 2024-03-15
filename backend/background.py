@@ -24,7 +24,7 @@ class AuditNotifier:
   def check_for_new_audits(self):
     with pyodbc.connect(self.connection_string) as connection:
       with connection.cursor() as cursor:
-        cursor.execute("SELECT Audit_ID FROM Audits WHERE Audit_ID = 5")
+        cursor.execute("SELECT Audit_ID FROM Audits WHERE Audit_Date > GETDATE()")
         rows = cursor.fetchall()
         return rows if rows else None
 
@@ -52,5 +52,7 @@ class AuditNotifier:
     if templateID:
       message.template_id = templateID
     sg = SendGridAPIClient(api_key=self.sendgrid_key)
+    print("MESSAGE IS THIS", message)
     response = sg.send(message)
+    print("THIS IS THE RESPONSE", response)
     print(response.status_code, response.body, response.headers)

@@ -31,7 +31,7 @@ const Dashboard = () => {
       
       const result = response.data;
       if (!result.error) {
-        console.log(result[0]);
+        // console.log(result[0]);
         return result[0]; // Ensure this is the correct structure you're expecting
       }
     } catch (error) {
@@ -75,13 +75,12 @@ const Dashboard = () => {
     <div id="dashboard-page" style={{
       display: 'grid',
       gridTemplateAreas: `
-        "header header header"
         "sidebar dragbar content"`,
       gridTemplateColumns: `${sidebarWidth} 5px auto`,
       height: '100vh',
       gridTemplateRows: 'auto 1fr',
     }}>
-      <Header />
+      {/* <Header /> */}
       <div id="sidebar" className='main-container' style={{ gridArea: 'sidebar' }}>
         <Navbar />
       </div>

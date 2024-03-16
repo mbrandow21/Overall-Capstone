@@ -1,5 +1,7 @@
+$primaryBgColor: #ecf0f1;
+
 #record-display-container {
-  background: white;
+  background: $primaryBgColor;
   // padding: 15px;
   grid-area: content;
   overflow-x: auto;

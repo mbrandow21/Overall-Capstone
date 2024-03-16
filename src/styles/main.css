@@ -633,6 +633,7 @@ h1 {
 
 .main-container {
   background-color: rgba(255, 255, 255, 0.5);
+  min-height: 100vh;
   overflow-y: auto;
 }
 
@@ -654,7 +655,7 @@ h1 {
 }
 
 #main-container-side-bar {
-  background: #f7f1e3;
+  background: #34475b;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -662,10 +663,12 @@ h1 {
   grid-area: sidebar;
   overflow-x: auto;
   overflow: auto;
+  color: #ecf0f1;
 }
 #main-container-side-bar #table-selection {
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 #main-container-side-bar #table-selection p {
   margin-left: 6px;
@@ -679,27 +682,54 @@ h1 {
   justify-content: center;
   margin-top: 10px;
 }
+#main-container-side-bar #img-container h1 {
+  font-size: 2.5rem;
+  color: #ecf0f1;
+  text-decoration: none;
+}
+#main-container-side-bar li, #main-container-side-bar .logout-button {
+  position: relative;
+  margin: 0 1rem;
+}
+#main-container-side-bar li::after, #main-container-side-bar .logout-button::after {
+  content: "";
+  position: absolute;
+  background-color: #ecf0f1;
+  height: 2px;
+  width: 100%;
+  bottom: -6px;
+  transform: scaleX(0);
+  transition: transform 150ms ease-in-out;
+  transform-origin: right;
+}
+#main-container-side-bar li:hover::after, #main-container-side-bar li:focus-within::after, #main-container-side-bar li.active::after, #main-container-side-bar .logout-button:hover::after, #main-container-side-bar .logout-button:focus-within::after, #main-container-side-bar .logout-button.active::after {
+  transform-origin: left;
+  transform: scaleX(1);
+}
+#main-container-side-bar .logout-button {
+  margin-top: auto;
+  margin-bottom: 1.5rem;
+}
 
 ul {
   list-style-type: none;
   text-align: left;
-  margin: 1rem 1rem 0 0;
   padding: 0;
 }
 
 li a {
-  color: black;
+  color: #ecf0f1;
   text-decoration: none;
   font-size: 1.25em;
   display: flex;
   align-items: center;
   position: relative;
-  margin: 0.75em 0.75em;
+  margin: 0.75rem 0.25rem;
 }
 
 a {
-  color: black;
   text-decoration: none;
+  color: currentColor;
 }
 
 #header-container {
@@ -713,7 +743,7 @@ a {
 }
 
 #record-display-container {
-  background: white;
+  background: #ecf0f1;
   grid-area: content;
   overflow-x: auto;
   height: 100%;

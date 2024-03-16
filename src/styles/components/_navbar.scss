@@ -1,7 +1,8 @@
-$navTextColor: black;
+$secondaryTextColor: #ecf0f1;
+$secondaryBgColor: #34475b;
 
 #main-container-side-bar {
-  background: #f7f1e3;
+  background: $secondaryBgColor;
   // width: 20%;
   // height: 80vh;
   // margin: 6px;
@@ -14,9 +15,11 @@ $navTextColor: black;
   grid-area: sidebar;
   overflow-x: auto;
   overflow: auto;
+  color: $secondaryTextColor;
   #table-selection {
     display: flex;
     flex-direction: column;
+    height: 100%;
     p {
       margin-left: 6px;
       font-size: 18px;
@@ -30,28 +33,58 @@ $navTextColor: black;
     display: flex;
     justify-content: center;
     margin-top: 10px;
+    h1 {
+      font-size: 2.5rem;
+      color: $secondaryTextColor;
+      text-decoration: none;
+    }
+  }
+  li, .logout-button {
+    position: relative;
+    margin: 0 1rem;
+    &::after {
+      content: '';
+      position: absolute;
+      background-color: $secondaryTextColor;
+      height: 2px;
+      width:100%;
+      bottom:-6px;
+      
+      transform: scaleX(0);
+      transition: transform 150ms ease-in-out;
+      transform-origin: right;
+    }
+    &:hover::after, &:focus-within::after, &.active::after{
+      transform-origin: left;
+      transform: scaleX(1);
+      
+    }
+  }
+  .logout-button {
+    margin-top: auto;
+    margin-bottom: 1.5rem;
   }
 }
 
 ul {
   list-style-type: none;
   text-align: left;
-  margin: 1rem 1rem 0 0;
+  // margin: 1rem 1rem 0 0;
   padding: 0;
 }
 li a {
-  color: $navTextColor;
+  color: $secondaryTextColor;
   text-decoration: none;
   font-size: 1.25em;
   // gap: .5em;
   display: flex;
   align-items: center;
   position: relative;
-  margin: 0.75em 0.75em;
+  margin: .75rem .25rem;
 
 }
 
 a {
-  color: $navTextColor;
   text-decoration: none;
+  color: currentColor
 }

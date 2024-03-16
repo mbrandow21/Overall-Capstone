@@ -755,14 +755,14 @@ a {
   border-collapse: collapse;
 }
 #record-display-container table tr:hover {
-  background-color: #f7f1e3;
+  background-color: #9ac6f6;
 }
 #record-display-container table tr {
   border-bottom: 1px solid #2c3e50;
 }
 #record-display-container table th {
   background-color: #2e2d2b;
-  color: #f7f1e3;
+  color: #ecf0f1;
 }
 #record-display-container table th, #record-display-container table td {
   padding: 8px;

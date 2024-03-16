@@ -75,7 +75,7 @@ const Dashboard = () => {
     <div id="dashboard-page" style={{
       display: 'grid',
       gridTemplateAreas: `
-        "sidebar dragbar content"`,
+        "sidebar content content"`,
       gridTemplateColumns: `${sidebarWidth} 5px auto`,
       height: '100vh',
       gridTemplateRows: 'auto 1fr',
@@ -84,11 +84,6 @@ const Dashboard = () => {
       <div id="sidebar" className='main-container' style={{ gridArea: 'sidebar' }}>
         <Navbar />
       </div>
-      <div id="dragbar" style={{
-        gridArea: 'dragbar',
-        cursor: 'col-resize',
-        backgroundColor: '#ccc'
-      }} onMouseDown={handleDrag}></div>
       <div id="content" className='main-container' style={{ gridArea: 'content' }}>
         <DataGrid />
       </div>

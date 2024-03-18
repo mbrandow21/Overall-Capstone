@@ -32,4 +32,12 @@ Lib
 
 *share*
 
+<<<<<<< Updated upstream
 *.cfg
+=======
+*pyvenv*
+backend/pyvenv.cfg
+*.cfg
+*.cfg
+*.cfg
+>>>>>>> Stashed changes
